@@ -1,7 +1,9 @@
 find_package(Git)
 if(NOT GIT_FOUND)
-  message(WARNING "git not found")
+  message(WARNING "git executable not found")
 endif()
+
+set(BUILD_EXT_DIR ${PROJECT_SOURCE_DIR})
 
 include (ExternalProject)
 
@@ -14,33 +16,28 @@ function(make_subm MNAME)
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
   set(submodule_target initSubModules_${MNAME} PARENT_SCOPE)
-  add_dependencies(${MNAME} ${submodule_target})
+  add_dependencies(${MNAME} initSubModules_${MNAME})
 endfunction(make_subm)
 
 #############
 # CVODE
-set(CVODE_HOME "${EXTERNALPACKAGES}/cvode")
+set(CVODE_HOME ${EXTERNALPACKAGES}/cvode)
+set(CVODE_INSTALL_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cvode)
 ExternalProject_Add(cvode
-  PREFIX ${CVODE_HOME}
   SOURCE_DIR ${CVODE_HOME}
-  BINARY_DIR ${CVODE_HOME}/build
-  STAMP_DIR ${CVODE_HOME}/build
-  TMP_DIR ${CVODE_HOME}/build
-#  INSTALL_DIR ${CVODE_HOME}/install
-  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CVODE_HOME}/install
+  CMAKE_ARGS ${CVODE_HOME} -DCMAKE_INSTALL_PREFIX:PATH=${CVODE_INSTALL_DIR}
+  EP_BASE ${BUILD_EXT_DIR}
 )
 make_subm(cvode)
-
-include_directories(${EXTERNALPACKAGES}/cvode/install/include)
-link_directories(${EXTERNALPACKAGES}/cvode/install/lib)
-
+include_directories(${CVODE_INSTALL_DIR}/include)
+link_directories(${CVODE_INSTALL_DIR}/lib)
 set(ODE_LIBS_CVODE
   sundials_cvode
   sundials_nvecserial)
 
 #############
 # CoDiPack
-set(CODIPACK_HOME "${EXTERNALPACKAGES}/codipack")
+set(CODIPACK_HOME ${EXTERNALPACKAGES}/codipack)
 include_directories(${CODIPACK_HOME})
 add_library(codipack INTERFACE)
 make_subm(codipack)
