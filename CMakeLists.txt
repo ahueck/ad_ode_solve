@@ -12,20 +12,13 @@ else()
 endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
 message(STATUS "Binary output directory: " ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
+  
 set(EXTERNALPACKAGES ${PROJECT_SOURCE_DIR}/externalpackages)
+add_subdirectory(${EXTERNALPACKAGES})
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${EXTERNALPACKAGES}/cvode/install/include)
-include_directories(${EXTERNALPACKAGES}/codipack)
 
-link_directories(${EXTERNALPACKAGES}/cvode/install/lib)
-
-set(ODE_LIBS
-  sundials_cvode
-  sundials_nvecserial)
-
-#add_executable(rober${EXE_SUFFIX} src/main.cpp)
-#target_link_libraries(rober${EXE_SUFFIX} ${ODE_LIBS})
+add_executable(rober${EXE_SUFFIX} src/main.cpp)
+add_dependencies(rober${EXE_SUFFIX} cvode codipack)
+target_link_libraries(rober${EXE_SUFFIX} ${ODE_LIBS_CVODE})
