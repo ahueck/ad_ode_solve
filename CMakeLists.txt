@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 PROJECT(RoberODE)
 
 include(${PROJECT_SOURCE_DIR}/cmake/ToolchainOptions.cmake)
@@ -18,6 +18,9 @@ set(EXTERNALPACKAGES ${PROJECT_SOURCE_DIR}/externalpackages)
 add_subdirectory(${EXTERNALPACKAGES})
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${CVODE_INSTALL}/include)
+link_directories(${CVODE_INSTALL}/lib)
+include_directories(${CODIPACK_INSTALL}/include)
 
 add_executable(rober${EXE_SUFFIX} src/main.cpp)
 add_dependencies(rober${EXE_SUFFIX} cvode codipack)

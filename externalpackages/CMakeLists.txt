@@ -29,16 +29,15 @@ ExternalProject_Add(cvode
   EP_BASE ${BUILD_EXT_DIR}
 )
 make_subm(cvode)
-include_directories(${CVODE_INSTALL_DIR}/include)
-link_directories(${CVODE_INSTALL_DIR}/lib)
 set(ODE_LIBS_CVODE
   sundials_cvode
-  sundials_nvecserial)
+  sundials_nvecserial 
+  PARENT_SCOPE)
+set(CVODE_INSTALL ${CVODE_INSTALL_DIR} PARENT_SCOPE)
 
 #############
 # CoDiPack
-set(CODIPACK_HOME ${EXTERNALPACKAGES}/codipack)
-include_directories(${CODIPACK_HOME})
+set(CODIPACK_INSTALL ${EXTERNALPACKAGES}/codipack PARENT_SCOPE)
 add_library(codipack INTERFACE)
 make_subm(codipack)
 
