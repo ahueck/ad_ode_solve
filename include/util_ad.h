@@ -42,10 +42,10 @@ void diff_rm_J(const Function& f, const Vector& x, Matrix& J, const size_t n, co
   tape.setPassive();
 
   // assemble full jacobian:
-  for(size_t i = 0; i < n;++i) {
+  for(size_t i = 0; i < m;++i) {
     g_f[i].setGradient(1.0);
     tape.evaluate();
-    for(size_t j = 0; j < m;++j) {
+    for(size_t j = 0; j < n;++j) {
         J(i, j) = g_x[j].getGradient();
     }
     tape.clearAdjoints();

@@ -72,9 +72,9 @@ class SolverCVode : public Solver<SolverCVode> {
   void cvode_dense2rowmat(DlsMat mat) {
     assert(j_buffer != nullptr);
     const size_t n = mat->N, m = mat->M;
-    for (size_t i = 0; i < n; ++i) {
-      for (size_t j = 0; j < m; ++j) {
-        j_buffer[i*m + j] = DENSE_ELEM(mat, i, j);
+    for (size_t i = 0; i < m; ++i) {
+      for (size_t j = 0; j < n; ++j) {
+        j_buffer[i*n + j] = DENSE_ELEM(mat, i, j);
       }
     }
   }
@@ -82,9 +82,9 @@ class SolverCVode : public Solver<SolverCVode> {
   void rowmat2cvode_dense(DlsMat mat) {
     assert(j_buffer != nullptr);
     const size_t n = mat->N, m = mat->M;
-    for (size_t i = 0; i < n; ++i) {
-      for (size_t j = 0; j < m; ++j) {
-        DENSE_ELEM(mat, i, j) = j_buffer[i*m + j];
+    for (size_t i = 0; i < m; ++i) {
+      for (size_t j = 0; j < n; ++j) {
+        DENSE_ELEM(mat, i, j) = j_buffer[i*n + j];
       }
     }
   }

@@ -57,8 +57,8 @@ template<typename Dtype, typename T>
 struct MatWrapper {
   using value_type = Dtype;
 
-  const size_t n;
-  const size_t m;
+  const size_t n; // #columns
+  const size_t m; // #rows
   T mat;
 
   MatWrapper(T mat, const size_t n, const size_t m)
@@ -67,11 +67,11 @@ struct MatWrapper {
   }
 
   Dtype& operator()(const size_t i, const size_t j) {
-    return mat[i*m + j];
+    return mat[i*n + j];
   }
 
   const Dtype& operator()(const size_t i, const size_t j) const {
-    return mat[i*m + j];
+    return mat[i*n + j];
   }
 };
 
