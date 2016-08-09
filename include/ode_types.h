@@ -36,19 +36,19 @@ struct VecWrapper {
     std::copy(l.begin(), l.end(), &v[0]);
   }
 
-  Dtype& operator[](const size_t i) {
+  inline Dtype& operator[](const size_t i) {
     return v[i];
   }
 
-  const Dtype& operator[](const size_t i) const {
+  inline const Dtype& operator[](const size_t i) const {
     return v[i];
   }
 
-  Dtype& operator()(const size_t i) {
+  inline Dtype& operator()(const size_t i) {
     return v[i];
   }
 
-  const Dtype& operator()(const size_t i) const {
+  inline const Dtype& operator()(const size_t i) const {
     return v[i];
   }
 };
@@ -66,11 +66,11 @@ struct MatWrapper {
 
   }
 
-  Dtype& operator()(const size_t i, const size_t j) {
+  inline Dtype& operator()(const size_t i, const size_t j) {
     return mat[i*n + j];
   }
 
-  const Dtype& operator()(const size_t i, const size_t j) const {
+  inline const Dtype& operator()(const size_t i, const size_t j) const {
     return mat[i*n + j];
   }
 };

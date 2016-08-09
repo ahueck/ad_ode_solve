@@ -10,6 +10,9 @@
 
 namespace ode {
 
+struct Eq;
+struct Jacobian;
+
 template<typename Derived>
 class Solver {
 
