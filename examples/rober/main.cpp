@@ -1,4 +1,4 @@
-#include "ode_systems/rober.h"
+#include "rober.h"
 #include "SolverCVode.h"
 
 int main() {

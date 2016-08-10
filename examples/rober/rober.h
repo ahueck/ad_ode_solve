@@ -1,12 +1,11 @@
 #ifndef ROBERTSON_H_
 #define ROBERTSON_H_
 
-#include <cmath>
-#include <tuple>
+#include <ode.h>
+#include <ode_types.h>
+#include <util_ad.h>
 
-#include "../ode.h"
-#include "../ode_types.h"
-#include "../util_ad.h"
+#include <cmath>
 
 namespace rober {
 
@@ -14,7 +13,7 @@ namespace detail {
 
 struct rober_functor {
   template<typename Vec>
-  void operator()(const Vec& y, Vec& dydt) const {
+  inline void operator()(const Vec& y, Vec& dydt) const {
     using std::pow;
     dydt[0] = -0.04 * y[0] + 1e4 * y[1] * y[2];
     dydt[1] =  0.04 * y[0] - 1e4 * y[1] * y[2] - 3e7 * pow(y[1], 2);
@@ -51,7 +50,7 @@ struct Rober_j : ode::Jacobian {
 
   void J(const ode::Vec_s& y, ode::Mat_s& Jf, const ode::scalar&, const ode::Vec_s&) final {
     using namespace ode;
-    ode::ad::diff_rm_J<detail::rober_functor, Vec_s, Mat_s>(rober_f, y, Jf, Jf.n, Jf.m);
+    ode::ad::diff_v_fm_J<detail::rober_functor, Vec_s, Mat_s, 3, 3>(rober_f, y, Jf);
   }
 };
 

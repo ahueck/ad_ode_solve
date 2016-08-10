@@ -22,6 +22,8 @@ include_directories(${CVODE_INSTALL}/include)
 link_directories(${CVODE_INSTALL}/lib)
 include_directories(${CODIPACK_INSTALL}/include)
 
-add_executable(rober${EXE_SUFFIX} src/main.cpp)
-add_dependencies(rober${EXE_SUFFIX} cvode codipack)
-target_link_libraries(rober${EXE_SUFFIX} ${ODE_LIBS_CVODE})
+add_library(ad_ode src/SolverCVode.cpp)
+add_dependencies(ad_ode cvode codipack)
+target_link_libraries(ad_ode ${ODE_LIBS_CVODE})
+
+add_subdirectory(examples)
