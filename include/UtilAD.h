@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_UTIL_AD_H_
-#define INCLUDE_UTIL_AD_H_
+#ifndef INCLUDE_UTILAD_H_
+#define INCLUDE_UTILAD_H_
 
 #include <codi.hpp>
 
@@ -146,4 +146,4 @@ void diff_v_rm_J(const Function& f, const Vector& x, Matrix& J) {
 
 } /* namespace ode */
 
-#endif /* INCLUDE_UTIL_AD_H_ */
+#endif /* INCLUDE_UTILAD_H_ */

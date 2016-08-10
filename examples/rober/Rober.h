@@ -1,11 +1,11 @@
 #ifndef ROBERTSON_H_
 #define ROBERTSON_H_
 
-#include <ode.h>
-#include <ode_types.h>
-#include <util_ad.h>
-
 #include <cmath>
+
+#include "../../include/ODE.h"
+#include "../../include/ODETypes.h"
+#include "../../include/UtilAD.h"
 
 namespace rober {
 

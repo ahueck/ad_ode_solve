@@ -8,7 +8,7 @@
 #ifndef INCLUDE_ODE_H_
 #define INCLUDE_ODE_H_
 
-#include "ode_types.h"
+#include "ODETypes.h"
 
 namespace ode {
 

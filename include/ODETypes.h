@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_ODE_TYPES_H_
-#define INCLUDE_ODE_TYPES_H_
+#ifndef INCLUDE_ODETYPES_H_
+#define INCLUDE_ODETYPES_H_
 
 #include <algorithm>
 #include <cstddef>
@@ -81,4 +81,4 @@ using Mat_s = MatWrapper<scalar, scalar*>;
 
 } /* namespace ode */
 
-#endif /* INCLUDE_ODE_TYPES_H_ */
+#endif /* INCLUDE_ODETYPES_H_ */

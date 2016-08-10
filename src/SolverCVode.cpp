@@ -7,15 +7,14 @@
 
 
 #include <SolverCVode.h>
-#include <ode.h>
-#include <ode_types.h>
-
 #include <nvector/nvector_serial.h>  /* serial N_Vector types, functions, and macros */
 #include <cvode/cvode_dense.h>       /* prototype for CVDense */
 #include <sundials/sundials_types.h> /* definition of type realtype */
 #include <sundials/sundials_math.h>  /* definition of ABS */
 
 #include <assert.h>
+#include <ODE.h>
+#include <ODETypes.h>
 #include <iostream>
 #include <functional>
 
