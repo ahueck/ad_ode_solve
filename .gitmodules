@@ -1,0 +1,6 @@
+[submodule "externalpackages/codipack"]
+	path = externalpackages/codipack
+	url = https://github.com/SciCompKL/CoDiPack
+[submodule "externalpackages/cvode"]
+	path = externalpackages/cvode
+	url = https://github.com/ufz/cvode
