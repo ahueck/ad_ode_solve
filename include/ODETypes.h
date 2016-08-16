@@ -14,25 +14,20 @@
 
 namespace ode {
 
-template<typename Dtype, typename T>
+template <typename Dtype, typename T>
 struct VecWrapper {
   using value_type = Dtype;
 
   const size_t n;
   T v;
 
-  VecWrapper()
-    :  n{}, v{} {
-
+  VecWrapper() : n{}, v{} {
   }
 
-  VecWrapper(T vec, const size_t n)
-    :  n(n), v(vec) {
-
+  VecWrapper(T vec, const size_t n) : n(n), v(vec) {
   }
 
-  VecWrapper(T vec, std::initializer_list<value_type> l)
-    :  n(l.size()), v(vec) {
+  VecWrapper(T vec, std::initializer_list<value_type> l) : n(l.size()), v(vec) {
     std::copy(l.begin(), l.end(), &v[0]);
   }
 
@@ -53,25 +48,23 @@ struct VecWrapper {
   }
 };
 
-template<typename Dtype, typename T>
+template <typename Dtype, typename T>
 struct MatWrapper {
   using value_type = Dtype;
 
-  const size_t n; // #columns
-  const size_t m; // #rows
+  const size_t n;  // #columns
+  const size_t m;  // #rows
   T mat;
 
-  MatWrapper(T mat, const size_t n, const size_t m)
-    : n(n), m(m), mat(mat) {
-
+  MatWrapper(T mat, const size_t n, const size_t m) : n(n), m(m), mat(mat) {
   }
 
   inline Dtype& operator()(const size_t i, const size_t j) {
-    return mat[i*n + j];
+    return mat[i * n + j];
   }
 
   inline const Dtype& operator()(const size_t i, const size_t j) const {
-    return mat[i*n + j];
+    return mat[i * n + j];
   }
 };
 
