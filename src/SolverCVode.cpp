@@ -35,7 +35,7 @@ inline void SolverCVode::f(N_Vector y, N_Vector ydot) {
 
 inline void SolverCVode::J(N_Vector y, N_Vector fy, DlsMat J) {
   Vec_s y_v(NV_DATA_S(y), NV_LENGTH_S(y));
-  // FIXME improve copying
+  // FIXME improve upon copying
   cvode_dense2rowmat(J);
   Mat_s J_mat(j_buffer, J->N, J->M);
   jac_f->J(y_v, J_mat, 0.0, Vec_s());
@@ -43,23 +43,17 @@ inline void SolverCVode::J(N_Vector y, N_Vector fy, DlsMat J) {
 }
 
 void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
-  const size_t NEQ = config.get<int>("NEQ");
+  const size_t NEQ = config.get<unsigned>("NEQ");
   const realtype T0 = config.get<realtype>("t0");
   const realtype TN = config.get<realtype>("tend");
   const realtype TS = config.get<realtype>("ts");
   realtype reltol = config.get<realtype>("rtol");
-  auto conf_atol = config.get<std::vector<double>>("atol");
-  const auto& size_atol = conf_atol.size();
-  auto abstol = N_VNew_Serial(size_atol);
-  for (unsigned i = 0; i < size_atol; ++i) {
-    NV_Ith_S(abstol, i) = conf_atol[i];
-  }
-
+  auto conf_atol = config.get<std::vector<realtype>>("atol");
+  auto abstol = N_VNew_Serial(conf_atol.size());
+  std::copy(std::begin(conf_atol), std::end(conf_atol), NV_DATA_S(abstol));
   const auto size_in = y0.size();
   auto y = N_VNew_Serial(size_in);
-  for (unsigned i = 0; i < size_in; ++i) {
-    NV_Ith_S(y, i) = y0[i];
-  }
+  std::copy(std::begin(y0), std::end(y0), NV_DATA_S(y));
 
   cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
 
@@ -79,7 +73,7 @@ void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
 
   int cv_flag;
   realtype t;
-  /* FIXME: output at certain intervalls */
+  /* FIXME: output at certain intervals */
   cv_flag = CVode(cvode_mem, TN, y, &t, CV_NORMAL);
   std::cout << t << ": " << NV_Ith_S(y, 0) << ", " << NV_Ith_S(y, 1) << ", " << NV_Ith_S(y, 2) << "\n";
 
@@ -89,7 +83,7 @@ void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
 }
 
 inline void SolverCVode::cvode_dense2rowmat(DlsMat mat) {
-  assert(j_buffer != nullptr);
+  // N == num cols, M == num rows
   const size_t n = mat->N, m = mat->M;
   for (size_t i = 0; i < m; ++i) {
     for (size_t j = 0; j < n; ++j) {
@@ -99,7 +93,7 @@ inline void SolverCVode::cvode_dense2rowmat(DlsMat mat) {
 }
 
 inline void SolverCVode::rowmat2cvode_dense(DlsMat mat) {
-  assert(j_buffer != nullptr);
+  // N == num cols, M == num rows
   const size_t n = mat->N, m = mat->M;
   for (size_t i = 0; i < m; ++i) {
     for (size_t j = 0; j < n; ++j) {
