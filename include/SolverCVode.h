@@ -8,11 +8,35 @@
 #define INCLUDE_SOLVERCVODE_H_
 
 #include "Solver.h"
+#include "ODETypes.h"
 
 #include <cvode/cvode.h>             /* prototypes for CVODE fcts. and consts. */
 #include <sundials/sundials_dense.h> /* definitions DlsMat and DENSE_ELEM */
 
 namespace ode {
+
+//struct MatrixView;
+
+struct DlsMatView : public MatrixView<DlsMatView> {
+  using value_type = realtype;
+
+private:
+  DlsMat matrix;
+
+public:
+  DlsMatView(const DlsMat& matrix) : matrix(matrix) {
+
+  }
+
+  inline value_type& operator()(const size_t i, const size_t j) {
+     return DENSE_ELEM(matrix, i, j);
+   }
+
+   inline const value_type& operator()(const size_t i, const size_t j) const {
+     return DENSE_ELEM(matrix, i, j);
+   }
+};
+
 namespace cvode {
 
 class SolverCVode : public Solver<SolverCVode> {

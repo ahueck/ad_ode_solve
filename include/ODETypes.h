@@ -68,6 +68,25 @@ struct MatWrapper {
   }
 };
 
+template <typename Matrix>
+struct MatrixView {
+
+  //using value_type = typename Matrix::value_type;
+
+  Matrix& cast() const {
+    return *static_cast<Matrix*>(this);
+  }
+
+  inline double& operator()(const size_t i, const size_t j) {
+    return cast()(i, j);
+  }
+
+  inline const double& operator()(const size_t i, const size_t j) const {
+    return cast()(i, j);
+  }
+};
+
+
 using scalar = double;
 using Vec_s = VecWrapper<scalar, scalar*>;
 using Mat_s = MatWrapper<scalar, scalar*>;

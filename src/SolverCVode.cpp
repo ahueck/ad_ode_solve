@@ -41,7 +41,8 @@ inline void SolverCVode::J(N_Vector y, N_Vector fy, DlsMat J) {
   // FIXME improve upon copying
   cvode_dense2rowmat(J);
   Mat_s J_mat(j_buffer, J->N, J->M);
-  jac_f->J(y_v, J_mat, 0.0, Vec_s());
+  DlsMatView view(J);
+  jac_f->J(y_v, view, 0.0, Vec_s());
   rowmat2cvode_dense(J);
 }
 

@@ -18,9 +18,19 @@ struct Eq {
   virtual ~Eq() = default;
 };
 
+template <typename Jac>
 struct Jacobian {
   Jacobian() = default;
-  virtual void J(const Vec_s& y, Mat_s& Jf, const scalar& t, const Vec_s& dydt) = 0;
+
+  Jac& cast() {
+    return *static_cast<Jac*>(this);
+  }
+
+  template <typename Matrix>
+  void J(const Vec_s& y, MatrixView<Matrix>& Jf, const scalar& t, const Vec_s& dydt) {
+    cast().J(y, Jf, t, dydt);
+  }
+
   virtual ~Jacobian() = default;
 };
 

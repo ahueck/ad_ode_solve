@@ -31,7 +31,7 @@ struct Rober_s : public ode::Eq {
 };
 
 struct Rober_j : public ode::Jacobian {
-  void J(const ode::Vec_s& y, ode::Mat_s& Jf, const ode::scalar&, const ode::Vec_s&) final {
+  void J(const ode::Vec_s& y, ode::MatrixView& Jf, const ode::scalar&, const ode::Vec_s&) final {
     Jf(0, 0) = -0.04;
     Jf(0, 1) = 1e4 * y(2);
     Jf(0, 2) = 1e4 * y(1);
