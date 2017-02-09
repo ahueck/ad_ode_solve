@@ -3,7 +3,8 @@
 
 int main() {
   rober::Rober_s f;
-  rober::ad::Rober_j j;
+  rober::ad::Rober_j j_ad;
+  rober::Rober_j j;
   std::vector<realtype> y0{1.0, 0.0, 0.0};
 
   ode::SolverConfig cf;
@@ -16,7 +17,7 @@ int main() {
   std::vector<realtype> atol{1.1e-12, 1.1e-14, 1.1e-12};
   cf.put("atol", atol);
 
-  ode::cvode::SolverCVode cv(&f, &j);
+  ode::cvode::SolverCVode<rober::Rober_j> cv(&f, &j);
   cv.solve(y0, cf);
 
   return 0;

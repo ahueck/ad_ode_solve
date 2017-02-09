@@ -30,8 +30,9 @@ struct Rober_s : public ode::Eq {
   }
 };
 
-struct Rober_j : public ode::Jacobian {
-  void J(const ode::Vec_s& y, ode::MatrixView& Jf, const ode::scalar&, const ode::Vec_s&) final {
+struct Rober_j : public ode::Jacobian<Rober_j> {
+  template <typename Matrix>
+  void J(const ode::Vec_s& y, ode::MatrixView<Matrix>& Jf, const ode::scalar&, const ode::Vec_s&) final {
     Jf(0, 0) = -0.04;
     Jf(0, 1) = 1e4 * y(2);
     Jf(0, 2) = 1e4 * y(1);
@@ -44,9 +45,10 @@ struct Rober_j : public ode::Jacobian {
 
 namespace ad {
 
-struct Rober_j : ode::Jacobian {
+struct Rober_j : ode::Jacobian<Rober_j> {
   detail::rober_functor rober_f;
 
+  template <typename Matrix>
   void J(const ode::Vec_s& y, ode::Mat_s& Jf, const ode::scalar&, const ode::Vec_s&) final {
     using namespace ode;
     ode::ad::diff_v_fm_J<detail::rober_functor, Vec_s, Mat_s, 3, 3>(rober_f, y, Jf);

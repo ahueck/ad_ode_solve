@@ -47,11 +47,11 @@ class SolverConfig final {
 };
 
 struct Eq;
-struct Jacobian;
+//struct Jacobian;
 
-template <typename Derived>
+template <typename Derived, typename Jacobian>
 class Solver {
- protected:
+ public:
   SolverConfig config;
   Eq* eq;
   Jacobian* jac_f;
@@ -59,10 +59,8 @@ class Solver {
  public:
   using vectory_type = std::vector<double>;
 
-  Solver() : eq(nullptr), jac_f(nullptr) {
-  }
+  Solver(Eq* eq, Jacobian* j) : eq(eq), jac_f(j) {
 
-  explicit Solver(Eq* eq, Jacobian* jac_f = nullptr) : eq(eq), jac_f(jac_f) {
   }
 
   Derived& cast() const {
@@ -92,6 +90,21 @@ class Solver {
   virtual ~Solver() {
   }
 };
+
+/*
+template <typename Derived>
+struct PointerCtr {
+
+  Derived& cast() const {
+    return *static_cast<Derived*>(this);
+  }
+
+  template<typename... Args>
+  void invoke_f(Args... args) {
+    cast().f(args);
+  }
+};
+*/
 
 } /* namespace ode */
 
