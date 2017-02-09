@@ -8,6 +8,8 @@
 #include <SolverCVode.h>
 #include <ODE.h>
 #include <ODETypes.h>
+#include <Stepper.h>
+#include <Util.h>
 
 #include <nvector/nvector_serial.h>  /* serial N_Vector types, functions, and macros */
 #include <cvode/cvode_dense.h>       /* prototype for CVDense */
@@ -17,6 +19,7 @@
 #include <assert.h>
 #include <iostream>
 #include <functional>
+#include <sstream>
 
 namespace ode {
 namespace cvode {
@@ -43,6 +46,7 @@ inline void SolverCVode::J(N_Vector y, N_Vector fy, DlsMat J) {
 }
 
 void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
+  const bool is_stiff = config.get<bool>("stiff");
   const size_t NEQ = config.get<unsigned>("NEQ");
   const realtype T0 = config.get<realtype>("t0");
   const realtype TN = config.get<realtype>("tend");
@@ -55,7 +59,11 @@ void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
   auto y = N_VNew_Serial(size_in);
   std::copy(std::begin(y0), std::end(y0), NV_DATA_S(y));
 
-  cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
+  if(is_stiff) {
+    cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
+  } else {
+    cvode_mem = CVodeCreate(CV_ADAMS, CV_FUNCTIONAL);
+  }
 
   CVodeInit(cvode_mem, cv_function_cb, T0, y);
   void* user_data = this;
@@ -73,9 +81,20 @@ void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
 
   int cv_flag;
   realtype t;
-  /* FIXME: output at certain intervals */
-  cv_flag = CVode(cvode_mem, TN, y, &t, CV_NORMAL);
-  std::cout << t << ": " << NV_Ith_S(y, 0) << ", " << NV_Ith_S(y, 1) << ", " << NV_Ith_S(y, 2) << "\n";
+  auto obs = [&NEQ](N_Vector y, const realtype t) {
+    auto y_d = NV_DATA_S(y);
+    std::ostringstream out_ss;
+    out_ss << t << ": ";
+    std::for_each(y_d, &y_d[NEQ - 1], [&] (realtype yi) {
+      out_ss << yi << ", ";
+    });
+    out_ss << y_d[NEQ - 1] << "\n";
+    std::cout << out_ss.str();
+  };
+  auto odes = [&] (N_Vector y, const realtype, const realtype, realtype cur_t) {
+    CVode(cvode_mem, cur_t, y, &t, CV_NORMAL);
+  };
+  ode::step_times(odes, y, T0, TN, TS, obs);
 
   /* Free y and abstol vectors */
   N_VDestroy_Serial(y);

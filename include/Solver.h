@@ -24,6 +24,10 @@ class SolverConfig final {
  public:
   SolverConfig() = default;
 
+  void clear() {
+    properties.clear();
+  }
+
   bool put(const std::string& key, const char* v) {
     properties[key] = std::make_shared<std::string>(v);
     return true;
