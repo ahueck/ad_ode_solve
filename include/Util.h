@@ -18,6 +18,11 @@ inline bool less(T a, T b) {
   return b - a > std::numeric_limits<T>::epsilon();
 }
 
+template<typename T>
+inline bool less_eq(T a, T b) {
+  return a - b <= std::numeric_limits<T>::epsilon();
+}
+
 } /* namespace util */
 } /* namespace ode */
 
