@@ -42,3 +42,8 @@ set(CODIPACK_INSTALL ${EXTERNALPACKAGES}/codipack PARENT_SCOPE)
 add_library(codipack INTERFACE)
 make_subm(codipack)
 
+#############
+# Catch (Testing)
+set(CATCH_INSTALL ${EXTERNALPACKAGES}/catch PARENT_SCOPE)
+add_library(catch INTERFACE)
+make_subm(catch)

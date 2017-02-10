@@ -23,7 +23,16 @@
 *.a
 *.lib
 
+# Folders
+build/
+bin/
+.settings/
+
 # Executables
 *.exe
 *.out
 *.app
+
+# Eclipse files
+.cproject
+.project

@@ -12,7 +12,7 @@
 
 namespace ode {
 
-template<typename ODESolver, typename State, typename Time, typename Observer>
+template <typename ODESolver, typename State, typename Time, typename Observer>
 size_t step_times(ODESolver ode_s, State state, const Time T0, const Time TE, const Time dt, Observer obs) {
   using ode::util::less_eq;
   size_t step{0};
@@ -23,7 +23,7 @@ size_t step_times(ODESolver ode_s, State state, const Time T0, const Time TE, co
     obs(state, current_time_int);
     ++step;
     current_time_int = T0 + (step + 1) * dt;
-  } while(less_eq(current_time_int, TE));
+  } while (less_eq(current_time_int, TE));
 
   return step;
 }

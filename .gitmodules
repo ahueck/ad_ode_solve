@@ -4,3 +4,6 @@
 [submodule "externalpackages/cvode"]
 	path = externalpackages/cvode
 	url = https://github.com/ufz/cvode
+[submodule "externalpackages/catch"]
+	path = externalpackages/catch
+	url = https://github.com/philsquared/Catch.git

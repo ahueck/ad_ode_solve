@@ -8,7 +8,6 @@
 #ifndef VAN_DER_POL_VDP_H_
 #define VAN_DER_POL_VDP_H_
 
-
 #include <cmath>
 
 #include "../../include/ODE.h"

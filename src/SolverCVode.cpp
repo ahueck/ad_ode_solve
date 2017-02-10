@@ -63,7 +63,7 @@ SolverCVode::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfi
 
   CVodeInit(cvode_mem_ptr, cv_function_cb, T0, y);
 
-  if(config.has("atolv")) {
+  if (config.has("atolv")) {
     auto conf_atol = config.get<std::vector<realtype>>("atolv");
     auto abstol = container2nvector(conf_atol);
 
@@ -93,13 +93,11 @@ SolverCVode::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfi
     auto y_d = NV_DATA_S(y);
     std::ostringstream out_ss;
     out_ss << t << ": ";
-    std::for_each(y_d, &y_d[NEQ - 1], [&y_d, &out_ss] (realtype yi) {
-      out_ss << yi << ", ";
-    });
+    std::for_each(y_d, &y_d[NEQ - 1], [&y_d, &out_ss](realtype yi) { out_ss << yi << ", "; });
     out_ss << y_d[NEQ - 1] << "\n";
     std::cout << out_ss.str();
   };
-  auto odes = [&] (N_Vector y, const realtype, const realtype, realtype cur_t) {
+  auto odes = [&](N_Vector y, const realtype, const realtype, realtype cur_t) {
     CVode(cvode_mem_ptr, cur_t, y, &t, CV_NORMAL);
   };
   ode::step_times(odes, y, T0, TN, TS, obs);
@@ -139,4 +137,3 @@ SolverCVode::~SolverCVode() {
 
 } /* namespace cvode */
 } /* namespace ode */
-
