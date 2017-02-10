@@ -11,7 +11,7 @@
 int main() {
   vdp::VDP_s f;
   vdp::ad::VDP_j j;
-  std::vector<realtype> y0{1.0, 0.0, 0.0};
+  std::vector<realtype> y0{1.0, 1.0};
 
   ode::SolverConfig cf;
   cf.put<bool>("stiff", true);

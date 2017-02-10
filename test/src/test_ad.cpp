@@ -18,10 +18,10 @@ TEST_CASE("AD on a simple 1D function", "[ad_1d]") {
 
   f1d f;
   Matrix1D J;
-  J(0,0) = 0.0;
+  J(0, 0) = 0.0;
   const std::array<double, 1> x{2.0};
 
-  REQUIRE(J(0,0) == Approx(0.0));
+  REQUIRE(J(0, 0) == Approx(0.0));
 
   SECTION("analytical") {
     std::array<double, 1> y{0.0};
@@ -33,24 +33,24 @@ TEST_CASE("AD on a simple 1D function", "[ad_1d]") {
   SECTION("forward mode scalar") {
     using ode::ad::diff_fm_J;
     diff_fm_J(f, x, J, 1, 1);
-    REQUIRE(J(0,0) == Approx(12.0));
+    REQUIRE(J(0, 0) == Approx(12.0));
   }
 
   SECTION("reverse mode scalar") {
     using ode::ad::diff_rm_J;
     diff_rm_J(f, x, J, 1, 1);
-    REQUIRE(J(0,0) == Approx(12.0));
+    REQUIRE(J(0, 0) == Approx(12.0));
   }
 
   SECTION("forward mode vector") {
     using ode::ad::diff_v_fm_J;
     diff_v_fm_J<f1d, decltype(x), Matrix1D, 1, 1>(f, x, J);
-    REQUIRE(J(0,0) == Approx(12.0));
+    REQUIRE(J(0, 0) == Approx(12.0));
   }
 
   SECTION("reverse mode vector") {
     using ode::ad::diff_v_rm_J;
     diff_v_rm_J<f1d, decltype(x), Matrix1D, 1, 1>(f, x, J);
-    REQUIRE(J(0,0) == Approx(12.0));
+    REQUIRE(J(0, 0) == Approx(12.0));
   }
 }

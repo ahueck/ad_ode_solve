@@ -23,20 +23,20 @@ inline T f1d_analytical(T x) {
   return 3 * x * x;
 }
 
-template<size_t n, size_t m>
+template <size_t n, size_t m>
 struct Matrix {
-  std::array<double, n*m> mat;
+  std::array<double, n * m> mat;
 
   double& operator()(size_t i, size_t j) {
-    return mat[i*m + j];
+    return mat[i * m + j];
   }
 
   double operator()(size_t i, size_t j) const {
-    return mat[i*m + j];
+    return mat[i * m + j];
   }
 };
 
-using Matrix1D = Matrix<1,1>;
+using Matrix1D = Matrix<1, 1>;
 
 } /* namespace test */
 } /* namespace ode */
