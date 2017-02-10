@@ -14,10 +14,10 @@ int main() {
   cf.put<realtype>("ts", 1e11);
   cf.put<realtype>("rtol", 1.1e-13);
   std::vector<realtype> atol{1.1e-12, 1.1e-14, 1.1e-12};
-  cf.put("atol", atol);
+  cf.put("atolv", atol);
 
   ode::cvode::SolverCVode cv(&f, &j);
-  cv.solve(y0, cf);
+  auto y_N = cv.solve(y0, cf);
 
   return 0;
 }

@@ -44,6 +44,10 @@ class SolverConfig final {
     auto val = static_cast<T*>(properties[key].get());
     return *val;
   }
+
+  bool has(const std::string& key) const {
+    return properties.find(key) != std::end(properties);
+  }
 };
 
 struct Eq;
@@ -81,12 +85,8 @@ class Solver {
     this->jac_f = j;
   }
 
-  void solve(const vectory_type& y0) {
-    cast().solve(y0);
-  }
-
-  void solve(const vectory_type& y0, SolverConfig& config) {
-    cast().solve(y0, config);
+  vectory_type solve(const vectory_type& y0, SolverConfig& config) {
+    return cast().solve(y0, config);
   }
 
   virtual ~Solver() {

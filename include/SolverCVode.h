@@ -26,11 +26,7 @@ class SolverCVode : public Solver<SolverCVode> {
   void f(N_Vector y, N_Vector ydot);
   void J(N_Vector y, N_Vector fy, DlsMat J);
 
-  void solve(const vectory_type& y0) {
-    solve(y0, config);
-  }
-
-  void solve(const vectory_type& y0, SolverConfig& config);
+  vectory_type solve(const vectory_type& y0, SolverConfig& config);
 
   virtual ~SolverCVode();
 

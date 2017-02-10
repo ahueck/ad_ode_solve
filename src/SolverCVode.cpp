@@ -45,19 +45,13 @@ inline void SolverCVode::J(N_Vector y, N_Vector fy, DlsMat J) {
   rowmat2cvode_dense(J);
 }
 
-void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
+SolverCVode::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
   const bool is_stiff = config.get<bool>("stiff");
   const size_t NEQ = config.get<unsigned>("NEQ");
   const realtype T0 = config.get<realtype>("t0");
   const realtype TN = config.get<realtype>("tend");
   const realtype TS = config.get<realtype>("ts");
   realtype reltol = config.get<realtype>("rtol");
-  auto conf_atol = config.get<std::vector<realtype>>("atol");
-  auto abstol = N_VNew_Serial(conf_atol.size());
-  std::copy(std::begin(conf_atol), std::end(conf_atol), NV_DATA_S(abstol));
-  const auto size_in = y0.size();
-  auto y = N_VNew_Serial(size_in);
-  std::copy(std::begin(y0), std::end(y0), NV_DATA_S(y));
 
   if(is_stiff) {
     cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
@@ -65,12 +59,30 @@ void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
     cvode_mem = CVodeCreate(CV_ADAMS, CV_FUNCTIONAL);
   }
 
+  const auto size_in = y0.size();
+  auto y = N_VNew_Serial(size_in);
+  std::copy(std::begin(y0), std::end(y0), NV_DATA_S(y));
+
   CVodeInit(cvode_mem, cv_function_cb, T0, y);
+
+  const bool has_atolv = config.has("atolv");
+  if(has_atolv) {
+    auto conf_atol = config.get<std::vector<realtype>>("atolv");
+    auto abstol = N_VNew_Serial(conf_atol.size());
+    std::copy(std::begin(conf_atol), std::end(conf_atol), NV_DATA_S(abstol));
+
+    CVodeSVtolerances(cvode_mem, reltol, abstol);
+    N_VDestroy_Serial(abstol);
+  } else {
+    auto atol = config.get<realtype>("atol");
+    CVodeSStolerances(cvode_mem, reltol, atol);
+  }
+
   void* user_data = this;
   CVodeSetUserData(cvode_mem, user_data);
 
-  CVodeSVtolerances(cvode_mem, reltol, abstol);
   CVDense(cvode_mem, NEQ);
+
   if (jac_f != nullptr) {
     this->j_buffer = new realtype[NEQ * size_in];
     CVDlsSetDenseJacFn(cvode_mem, cv_jacobian_dense_cb);
@@ -85,7 +97,7 @@ void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
     auto y_d = NV_DATA_S(y);
     std::ostringstream out_ss;
     out_ss << t << ": ";
-    std::for_each(y_d, &y_d[NEQ - 1], [&] (realtype yi) {
+    std::for_each(y_d, &y_d[NEQ - 1], [&y_d, &out_ss] (realtype yi) {
       out_ss << yi << ", ";
     });
     out_ss << y_d[NEQ - 1] << "\n";
@@ -96,9 +108,13 @@ void SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
   };
   ode::step_times(odes, y, T0, TN, TS, obs);
 
+  vectory_type y_N;
+  std::copy(NV_DATA_S(y), NV_DATA_S(y) + NEQ, std::back_inserter(y_N));
+
   /* Free y and abstol vectors */
   N_VDestroy_Serial(y);
-  N_VDestroy_Serial(abstol);
+
+  return y_N;
 }
 
 inline void SolverCVode::cvode_dense2rowmat(DlsMat mat) {
