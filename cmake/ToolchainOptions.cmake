@@ -27,6 +27,20 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
   set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os")
 endif()
 
+# Sanitizer support only with Clang (for now)
+if(CMAKE_COMPILER_IS_CLANGXX AND SANITIZE)
+  # A debug build configuration is expected. We override for performance reasons:
+  set(CMAKE_CXX_FLAGS_DEBUG "-g -O1")
+  string(TOUPPER ${SANITIZE} SANITIZE_UPPER)
+  if(SANITIZE_UPPER STREQUAL "ASAN")
+    set(CXX_ONLY_FLAGS "${CXX_ONLY_FLAGS} -fsanitize=address -fno-optimize-sibling-calls -fno-omit-frame-pointer")
+  elseif(SANITIZE_UPPER STREQUAL "MSAN")
+    set(CXX_ONLY_FLAGS "${CXX_ONLY_FLAGS} -fsanitize=memory -fno-optimize-sibling-calls -fno-omit-frame-pointer -fsanitize-memory-track-origins=2")
+  elseif(SANITIZE_UPPER STREQUAL "UBSAN")
+    set(CXX_ONLY_FLAGS "${CXX_ONLY_FLAGS} -fsanitize=undefined -fsanitize=unsigned-integer-overflow -fno-omit-frame-pointer")
+  endif()
+endif()
+
 # COMMON_FLAGS is unsused for now
 set(CMAKE_CXX_FLAGS  "${CXX_ONLY_FLAGS} ${COMMON_FLAGS} ${CMAKE_CXX_FLAGS}")
 
