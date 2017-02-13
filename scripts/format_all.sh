@@ -12,6 +12,6 @@ for v in 3.8 3.7 ; do
 done
 
 find -regextype posix-egrep -regex ".*\.(h|cpp|hpp)" \
-         \( -path "./include/*" -o -path "./src/*" -o -path "./examples/*" \) \
+         \( -path "./include/*" -o -path "./src/*" -o -path "./examples/*" -o -path "./test/*" \) \
          -exec "$format" -i -style=file -fallback-style=none {} \;
 

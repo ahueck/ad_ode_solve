@@ -24,6 +24,11 @@ include_directories(${CODIPACK_INSTALL}/include)
 
 add_library(ad_ode src/SolverCVode.cpp)
 add_dependencies(ad_ode cvode codipack)
+target_compile_options(ad_ode PRIVATE -fno-rtti)
 target_link_libraries(ad_ode ${ODE_LIBS_CVODE})
 
 add_subdirectory(examples)
+add_subdirectory(test)
+
+enable_testing()
+add_test(NAME RunTests COMMAND test_runner${EXE_SUFFIX})

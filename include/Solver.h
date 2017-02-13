@@ -24,6 +24,10 @@ class SolverConfig final {
  public:
   SolverConfig() = default;
 
+  void clear() {
+    properties.clear();
+  }
+
   bool put(const std::string& key, const char* v) {
     properties[key] = std::make_shared<std::string>(v);
     return true;
@@ -39,6 +43,10 @@ class SolverConfig final {
   const T& get(const std::string& key) {
     auto val = static_cast<T*>(properties[key].get());
     return *val;
+  }
+
+  bool has(const std::string& key) const {
+    return properties.find(key) != std::end(properties);
   }
 };
 
@@ -77,12 +85,8 @@ class Solver {
     this->jac_f = j;
   }
 
-  void solve(const vectory_type& y0) {
-    cast().solve(y0);
-  }
-
-  void solve(const vectory_type& y0, SolverConfig& config) {
-    cast().solve(y0, config);
+  vectory_type solve(const vectory_type& y0, SolverConfig& config) {
+    return cast().solve(y0, config);
   }
 
   virtual ~Solver() {

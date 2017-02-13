@@ -12,11 +12,23 @@
 #include <cvode/cvode.h>             /* prototypes for CVODE fcts. and consts. */
 #include <sundials/sundials_dense.h> /* definitions DlsMat and DENSE_ELEM */
 
+#include <memory>
+
 namespace ode {
 namespace cvode {
 
+namespace detail {
+
+struct cvode_del final {
+  void operator()(void* cvode_mem) const {
+    CVodeFree(&cvode_mem);
+  }
+};
+
+} /* namespace detail */
+
 class SolverCVode : public Solver<SolverCVode> {
-  void* cvode_mem;
+  std::unique_ptr<void, detail::cvode_del> cvode_mem;
   realtype* j_buffer;
 
  public:
@@ -26,17 +38,13 @@ class SolverCVode : public Solver<SolverCVode> {
   void f(N_Vector y, N_Vector ydot);
   void J(N_Vector y, N_Vector fy, DlsMat J);
 
-  void solve(const vectory_type& y0) {
-    solve(y0, config);
-  }
-
-  void solve(const vectory_type& y0, SolverConfig& config);
+  vectory_type solve(const vectory_type& y0, SolverConfig& config);
 
   virtual ~SolverCVode();
 
  private:
-  void cvode_dense2rowmat(DlsMat mat);
-  void rowmat2cvode_dense(DlsMat mat);
+  void dlsmat2rowmat(DlsMat mat);
+  void rowmat2dlsmat(DlsMat mat);
 };
 
 } /* namespace cvode */
