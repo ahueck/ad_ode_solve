@@ -80,6 +80,9 @@ SolverCVode::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfi
   CVDense(cvode_mem_ptr, NEQ);
 
   if (jac_f != nullptr) {
+    if (j_buffer != nullptr) {
+      delete[] j_buffer;
+    }
     this->j_buffer = new realtype[NEQ * NV_LENGTH_S(y)];
     CVDlsSetDenseJacFn(cvode_mem_ptr, cv_jacobian_dense_cb);
   }
