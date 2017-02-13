@@ -20,7 +20,7 @@ struct Eq {
 
 struct Jacobian {
   Jacobian() = default;
-  virtual void J(const Vec_s& y, Mat_s& Jf, const scalar& t, const Vec_s& dydt) = 0;
+  virtual void J(const Vec_s& y, Mat_s& Jf, const scalar& t = scalar(0.0), const Vec_s& dydt = Vec_s()) = 0;
   virtual ~Jacobian() = default;
 };
 

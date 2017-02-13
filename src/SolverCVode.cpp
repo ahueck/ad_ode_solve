@@ -41,8 +41,8 @@ inline void SolverCVode::J(N_Vector y, N_Vector fy, DlsMat J) {
   Vec_s y_v(NV_DATA_S(y), NV_LENGTH_S(y));
   // FIXME improve upon copying
   dlsmat2rowmat(J);
-  Mat_s J_mat(j_buffer, J->N, J->M);
-  jac_f->J(y_v, J_mat, 0.0, Vec_s());
+  Mat_s J_mat(j_buffer.get(), J->N, J->M);
+  jac_f->J(y_v, J_mat);
   rowmat2dlsmat(J);
 }
 
@@ -80,10 +80,7 @@ SolverCVode::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfi
   CVDense(cvode_mem_ptr, NEQ);
 
   if (jac_f != nullptr) {
-    if (j_buffer != nullptr) {
-      delete[] j_buffer;
-    }
-    this->j_buffer = new realtype[NEQ * NV_LENGTH_S(y)];
+    this->j_buffer = std::make_unique<realtype>(NEQ * NV_LENGTH_S(y));
     CVDlsSetDenseJacFn(cvode_mem_ptr, cv_jacobian_dense_cb);
   }
 
@@ -114,9 +111,10 @@ SolverCVode::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfi
 inline void SolverCVode::dlsmat2rowmat(DlsMat mat) {
   // N == num cols, M == num rows
   const size_t n = mat->N, m = mat->M;
+  auto j_buf_ptr = j_buffer.get();
   for (size_t i = 0; i < m; ++i) {
     for (size_t j = 0; j < n; ++j) {
-      j_buffer[i * n + j] = DENSE_ELEM(mat, i, j);
+      j_buf_ptr[i * n + j] = DENSE_ELEM(mat, i, j);
     }
   }
 }
@@ -124,17 +122,11 @@ inline void SolverCVode::dlsmat2rowmat(DlsMat mat) {
 inline void SolverCVode::rowmat2dlsmat(DlsMat mat) {
   // N == num cols, M == num rows
   const size_t n = mat->N, m = mat->M;
+  auto j_buf_ptr = j_buffer.get();
   for (size_t i = 0; i < m; ++i) {
     for (size_t j = 0; j < n; ++j) {
-      DENSE_ELEM(mat, i, j) = j_buffer[i * n + j];
+      DENSE_ELEM(mat, i, j) = j_buf_ptr[i * n + j];
     }
-  }
-}
-
-SolverCVode::~SolverCVode() {
-  if (j_buffer != nullptr) {
-    delete[] j_buffer;
-    j_buffer = nullptr;
   }
 }
 

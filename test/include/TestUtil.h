@@ -15,6 +15,10 @@ template <size_t n>
 struct Vector {
   std::array<double, n> vec;
 
+  explicit Vector(std::initializer_list<double> v) {
+    std::copy(std::begin(v), std::end(v), std::begin(vec));
+  }
+
   double& operator()(size_t i) {
     return vec[i];
   }

@@ -29,7 +29,7 @@ struct cvode_del final {
 
 class SolverCVode : public Solver<SolverCVode> {
   std::unique_ptr<void, detail::cvode_del> cvode_mem;
-  realtype* j_buffer;
+  std::unique_ptr<realtype> j_buffer;
 
  public:
   SolverCVode();
@@ -40,7 +40,7 @@ class SolverCVode : public Solver<SolverCVode> {
 
   vectory_type solve(const vectory_type& y0, SolverConfig& config);
 
-  virtual ~SolverCVode();
+  virtual ~SolverCVode() = default;
 
  private:
   void dlsmat2rowmat(DlsMat mat);
