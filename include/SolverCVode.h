@@ -8,6 +8,7 @@
 #define INCLUDE_SOLVERCVODE_H_
 
 #include "Solver.h"
+#include "ODETypes.h"
 
 #include <cvode/cvode.h>             /* prototypes for CVODE fcts. and consts. */
 #include <sundials/sundials_dense.h> /* definitions DlsMat and DENSE_ELEM */
@@ -15,6 +16,7 @@
 #include <memory>
 
 namespace ode {
+
 namespace cvode {
 
 namespace detail {
@@ -29,7 +31,8 @@ struct cvode_del final {
 
 class SolverCVode : public Solver<SolverCVode> {
   std::unique_ptr<void, detail::cvode_del> cvode_mem;
-  realtype* j_buffer;
+  std::unique_ptr<realtype[]> j_buffer;
+  Mat_s J_mat;
 
  public:
   SolverCVode();
@@ -38,9 +41,9 @@ class SolverCVode : public Solver<SolverCVode> {
   void f(N_Vector y, N_Vector ydot);
   void J(N_Vector y, N_Vector fy, DlsMat J);
 
-  vectory_type solve(const vectory_type& y0, SolverConfig& config);
+  Solver<SolverCVode>::vectory_type solve(const vectory_type& y0, SolverConfig& config);
 
-  virtual ~SolverCVode();
+  virtual ~SolverCVode() = default;
 
  private:
   void dlsmat2rowmat(DlsMat mat);

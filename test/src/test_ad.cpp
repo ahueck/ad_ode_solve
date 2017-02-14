@@ -26,7 +26,6 @@ template <typename T>
 inline T f1d_analytical(T x) {
   return 3 * x * x;
 }
-
 }
 }
 }
@@ -75,4 +74,3 @@ TEST_CASE("AD on a simple function R^1 -> R^1", "[ad_1d]") {
     REQUIRE(J(0) == Approx(12.0));
   }
 }
-

@@ -14,21 +14,30 @@
 
 namespace ode {
 
-template <typename Dtype, typename T>
-struct VecWrapper {
-  using value_type = Dtype;
+template <typename T>
+struct VectorView {
+  using value_type = T;
+  using pointer_type = std::add_pointer_t<value_type>;
 
+  pointer_type v;
   const size_t n;
-  T v;
 
-  VecWrapper() : n{}, v{} {
+  VectorView() : v(nullptr), n(0) {
   }
 
-  VecWrapper(T vec, const size_t n) : n(n), v(vec) {
+  VectorView(pointer_type vec, const size_t n) : v(vec), n(n) {
   }
 
-  VecWrapper(T vec, std::initializer_list<value_type> l) : n(l.size()), v(vec) {
-    std::copy(l.begin(), l.end(), &v[0]);
+  VectorView(pointer_type vec, std::initializer_list<value_type> l) : v(vec), n(l.size()) {
+    std::copy(std::begin(l), std::end(l), &v[0]);
+  }
+
+  void set_data(pointer_type v) {
+    this->v = v;
+  }
+
+  void set_dim(size_t n) {
+    this->n = n;
   }
 
   inline value_type& operator[](const size_t i) {
@@ -48,15 +57,28 @@ struct VecWrapper {
   }
 };
 
-template <typename Dtype, typename T>
-struct MatWrapper {
-  using value_type = Dtype;
+template <typename T>
+struct MatrixView {
+  using value_type = T;
+  using pointer_type = std::add_pointer_t<value_type>;
 
-  const size_t n;  // #columns
-  const size_t m;  // #rows
-  T mat;
+  pointer_type mat;
+  size_t n;  // #columns
+  size_t m;  // #rows
 
-  MatWrapper(T mat, const size_t n, const size_t m) : n(n), m(m), mat(mat) {
+  MatrixView() : mat(nullptr), n(0), m(0) {
+  }
+
+  MatrixView(pointer_type mat, const size_t n, const size_t m) : mat(mat), n(n), m(m) {
+  }
+
+  void set_data(pointer_type mat) {
+    this->mat = mat;
+  }
+
+  void set_dim(size_t cols, size_t rows) {
+    this->n = cols;
+    this->m = rows;
   }
 
   inline value_type& operator()(const size_t i, const size_t j) {
@@ -69,8 +91,8 @@ struct MatWrapper {
 };
 
 using scalar = double;
-using Vec_s = VecWrapper<scalar, scalar*>;
-using Mat_s = MatWrapper<scalar, scalar*>;
+using Vec_s = VectorView<scalar>;
+using Mat_s = MatrixView<scalar>;
 
 } /* namespace ode */
 
