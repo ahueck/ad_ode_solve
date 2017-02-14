@@ -22,8 +22,6 @@ class SolverConfig final {
   property_map properties;
 
  public:
-  SolverConfig() = default;
-
   void clear() {
     properties.clear();
   }
@@ -40,7 +38,7 @@ class SolverConfig final {
   }
 
   template <typename T>
-  const T& get(const std::string& key) {
+  const T get(const std::string& key) {
     auto val = static_cast<T*>(properties[key].get());
     return *val;
   }
@@ -48,6 +46,8 @@ class SolverConfig final {
   bool has(const std::string& key) const {
     return properties.find(key) != std::end(properties);
   }
+
+  ~SolverConfig() = default;
 };
 
 struct Eq;

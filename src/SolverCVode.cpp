@@ -39,14 +39,12 @@ inline void SolverCVode::f(N_Vector y, N_Vector ydot) {
 
 inline void SolverCVode::J(N_Vector y, N_Vector fy, DlsMat J) {
   Vec_s y_v(NV_DATA_S(y), NV_LENGTH_S(y));
-  // FIXME improve upon copying
   dlsmat2rowmat(J);
-  Mat_s J_mat(j_buffer.get(), J->N, J->M);
   jac_f->J(y_v, J_mat);
   rowmat2dlsmat(J);
 }
 
-SolverCVode::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
+Solver<SolverCVode>::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
   const bool is_stiff = config.get<bool>("stiff");
   const size_t NEQ = config.get<unsigned>("NEQ");
   const realtype T0 = config.get<realtype>("t0");
@@ -80,24 +78,26 @@ SolverCVode::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfi
   CVDense(cvode_mem_ptr, NEQ);
 
   if (jac_f != nullptr) {
-    this->j_buffer = std::make_unique<realtype>(NEQ * NV_LENGTH_S(y));
+    this->j_buffer = std::make_unique<realtype[]>(NEQ * NV_LENGTH_S(y));
+    J_mat.set_data(j_buffer.get());
+    J_mat.set_dim(NEQ, NV_LENGTH_S(y));
     CVDlsSetDenseJacFn(cvode_mem_ptr, cv_jacobian_dense_cb);
   }
 
   CVodeSetStopTime(cvode_mem_ptr, TN);
   CVodeSetMaxNumSteps(cvode_mem_ptr, -1);
 
-  int cv_flag;
-  realtype t;
   auto obs = [&NEQ](N_Vector y, const realtype t) {
     auto y_d = NV_DATA_S(y);
     std::ostringstream out_ss;
     out_ss << t << ": ";
-    std::for_each(y_d, &y_d[NEQ - 1], [&y_d, &out_ss](realtype yi) { out_ss << yi << ", "; });
+    std::for_each(y_d, &y_d[NEQ - 1], [&out_ss](realtype yi) { out_ss << yi << ", "; });
     out_ss << y_d[NEQ - 1] << "\n";
     std::cout << out_ss.str();
   };
-  auto odes = [&](N_Vector y, const realtype, const realtype, realtype cur_t) {
+  auto odes = [&cvode_mem_ptr](N_Vector y, const realtype, const realtype, realtype cur_t) {
+    realtype t;
+    /*int cv_flag =*/
     CVode(cvode_mem_ptr, cur_t, y, &t, CV_NORMAL);
   };
   ode::step_times(odes, y, T0, TN, TS, obs);

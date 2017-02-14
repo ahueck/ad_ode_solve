@@ -11,8 +11,9 @@
 namespace ode {
 namespace cvode {
 
-//#include <cvode/cvode.h>             /* prototypes for CVODE fcts. and consts. */
 #include <nvector/nvector_serial.h> /* serial N_Vector types, functions, and macros */
+
+#include <algorithm>
 
 template <typename Container>
 inline N_Vector container2nvector(const Container& c) {
