@@ -9,6 +9,9 @@
 #include "SolverCVode.h"
 
 int main() {
+  using ode::y_series;
+  using ode::t_series;
+
   vdp::VDP_s f;
   vdp::ad::VDP_j j;
   std::vector<realtype> y0{1.0, 1.0};
@@ -23,7 +26,9 @@ int main() {
   cf.put("atol", 1.0e-6);
 
   ode::cvode::SolverCVode cv(&f, &j);
-  auto y_N = cv.solve(y0, cf);
+  y_series y;
+  t_series t;
+  std::tie(y, t) = cv.solve(y0, cf);
 
   return 0;
 }

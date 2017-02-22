@@ -1,7 +1,11 @@
 #include "Rober.h"
 #include "SolverCVode.h"
+#include "Util.h"
 
 int main() {
+  using ode::y_series;
+  using ode::t_series;
+
   rober::Rober_s f;
   rober::ad::Rober_j j;
   std::vector<realtype> y0{1.0, 0.0, 0.0};
@@ -17,7 +21,9 @@ int main() {
   cf.put("atolv", atol);
 
   ode::cvode::SolverCVode cv(&f, &j);
-  auto y_N = cv.solve(y0, cf);
+  y_series y;
+  t_series t;
+  std::tie(y, t) = cv.solve(y0, cf);
 
   return 0;
 }

@@ -8,6 +8,8 @@
 #ifndef INCLUDE_SOLVER_H_
 #define INCLUDE_SOLVER_H_
 
+#include "ODETypes.h"
+
 #include <map>
 #include <memory>
 #include <vector>
@@ -38,8 +40,9 @@ class SolverConfig final {
   }
 
   template <typename T>
-  const T get(const std::string& key) {
-    auto val = static_cast<T*>(properties[key].get());
+  const T& get(const std::string& key) const {
+    auto iter_elem = properties.find(key);
+    const auto val = static_cast<const T*>(iter_elem->second.get());
     return *val;
   }
 
@@ -61,8 +64,6 @@ class Solver {
   Jacobian* jac_f;
 
  public:
-  using vectory_type = std::vector<double>;
-
   Solver() : eq(nullptr), jac_f(nullptr) {
   }
 
@@ -85,7 +86,7 @@ class Solver {
     this->jac_f = j;
   }
 
-  vectory_type solve(const vectory_type& y0, SolverConfig& config) {
+  std::tuple<y_series, t_series> solve(const vectory_type& y0, const SolverConfig& config) {
     return cast().solve(y0, config);
   }
 

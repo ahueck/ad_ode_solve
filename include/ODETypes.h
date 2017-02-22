@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
+#include <vector>
 
 namespace ode {
 
@@ -93,6 +94,9 @@ struct MatrixView {
 using scalar = double;
 using Vec_s = VectorView<scalar>;
 using Mat_s = MatrixView<scalar>;
+using vectory_type = std::vector<scalar>;
+using y_series = std::vector<vectory_type>;
+using t_series = vectory_type;
 
 } /* namespace ode */
 
