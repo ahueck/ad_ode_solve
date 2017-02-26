@@ -9,4 +9,5 @@ set(unit_test_names
 )
 
 add_executable(test_runner${EXE_SUFFIX} src/main.cpp ${unit_test_names})
+add_dependencies(test_runner${EXE_SUFFIX} catch)
 target_link_libraries(test_runner${EXE_SUFFIX} ad_ode)

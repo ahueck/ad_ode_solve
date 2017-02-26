@@ -17,8 +17,8 @@ namespace cvode {
 
 template <typename Container>
 inline N_Vector container2nvector(const Container& c) {
-  auto s = std::begin(c);
-  auto e = std::end(c);
+  const auto s = std::begin(c);
+  const auto e = std::end(c);
   auto vec = N_VNew_Serial(std::distance(s, e));
   std::copy(s, e, NV_DATA_S(vec));
   return vec;
