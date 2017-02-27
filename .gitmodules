@@ -7,3 +7,6 @@
 [submodule "externalpackages/catch"]
 	path = externalpackages/catch
 	url = https://github.com/philsquared/Catch.git
+[submodule "externalpackages/matplotlib-cpp"]
+	path = externalpackages/matplotlib-cpp
+	url = https://github.com/lava/matplotlib-cpp.git

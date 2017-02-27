@@ -47,3 +47,9 @@ make_subm(codipack)
 set(CATCH_INSTALL ${EXTERNALPACKAGES}/catch PARENT_SCOPE)
 add_library(catch INTERFACE)
 make_subm(catch)
+
+#############
+# Matplotlib-cpp (Plotting)
+set(MATPLOTLIB_INSTALL ${EXTERNALPACKAGES}/matplotlib-cpp PARENT_SCOPE)
+add_library(matplotlib-cpp INTERFACE)
+make_subm(matplotlib-cpp)

@@ -25,7 +25,7 @@ struct vdp_functor {
   inline void operator()(const Vec& y, Vec& dydt) const {
     using std::pow;
     dydt[0] = y[1];
-    dydt[1] = -y[0] - mu * y[1] * (pow(y[0], 2) - 1.0);
+    dydt[1] = mu * y[1] * (1.0 - pow(y[0], 2)) - y[0];
   }
 };
 

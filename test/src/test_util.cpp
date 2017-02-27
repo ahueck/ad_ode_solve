@@ -36,10 +36,22 @@ TEST_CASE("Test general utility functions", "[utility]") {
     ode::y_series y_single{{1.5}};
     std::vector<std::vector<ode::vectory_type>> nested_v{{{1.5, 2.5}, {3.5, 4.5}}, {{5.7, 6.7}}};
     ode::scalar sc = 0.5;
+    ode::t_series t_empty;
+    ode::y_series y_empty;
 
     std::ostringstream out;
     out << std::setprecision(1);
     out << std::fixed;
+
+    out.str("");
+    print(t_empty, out);
+    REQUIRE("[]\n" == out.str());
+
+    out.str("");
+    print(y_empty, out);
+    REQUIRE("[]\n" == out.str());
+
+    out.str("");
     print(t, out);
     REQUIRE("[1.0, 2.3, 3.5, 4.0]\n" == out.str());
 
