@@ -1,0 +1,57 @@
+language: c++
+os: linux
+sudo: false
+
+# This only exists because of a bug: https://github.com/travis-ci/travis-ci/issues/4681
+env:
+  matrix:
+    - EMPTY_JOB_IN_TRAVIS_CI=1
+
+addons:
+  apt:
+    sources: &sources
+      - ubuntu-toolchain-r-test
+
+matrix:
+  exclude:
+    - env: EMPTY_JOB_IN_TRAVIS_CI=1
+  include:
+    - env: GCC_VERSION=5 BUILD_TYPE=Release
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - gcc-5
+          sources: *sources
+
+before_install:
+  - export DEPENDENCY_DIR="${TRAVIS_BUILD_DIR}/dependency" 
+  - mkdir -p ${DEPENDENCY_DIR}
+  - cd ${DEPENDENCY_DIR}
+
+install:
+  - |
+      CMAKE_URL="https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.tar.gz"
+      mkdir -p cmake
+      travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPENDENCY_DIR}/cmake/bin:${PATH}
+  - cmake --version
+
+before_script:
+  - |
+    if [[ -n $GCC_VERSION ]] ; then 
+      export CXX="g++-${GCC_VERSION}"
+      export CC="gcc-${GCC_VERSION}"
+    fi
+  - export BUILD_DIR="build_${CC}"
+  - mkdir -p ${BUILD_DIR}
+  - cd ${BUILD_DIR}
+
+script: 
+  - cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
+  - cmake --build .
+  - ctest
+
+branches:
+  only:
+    - master
