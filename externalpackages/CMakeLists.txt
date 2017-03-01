@@ -41,8 +41,15 @@ set(CVODE_INSTALL ${CVODE_INSTALL_DIR} PARENT_SCOPE)
 set(CODIPACK_INSTALL ${EXTERNALPACKAGES}/codipack PARENT_SCOPE)
 add_library(codipack INTERFACE)
 make_subm(codipack)
+
 #############
 # Catch (Testing)
 set(CATCH_INSTALL ${EXTERNALPACKAGES}/catch PARENT_SCOPE)
 add_library(catch INTERFACE)
 make_subm(catch)
+
+#############
+# Matplotlib-cpp (Plotting)
+set(MATPLOTLIB_INSTALL ${EXTERNALPACKAGES}/matplotlib-cpp PARENT_SCOPE)
+add_library(matplotlib-cpp INTERFACE)
+make_subm(matplotlib-cpp)

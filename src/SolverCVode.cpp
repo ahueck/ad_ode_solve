@@ -44,13 +44,19 @@ inline void SolverCVode::J(N_Vector y, N_Vector fy, DlsMat J) {
   rowmat2dlsmat(J);
 }
 
-Solver<SolverCVode>::vectory_type SolverCVode::solve(const vectory_type& y0, SolverConfig& config) {
+std::tuple<y_series, t_series> SolverCVode::solve(const vectory_type& y0, const SolverConfig& config) {
   const bool is_stiff = config.get<bool>("stiff");
   const size_t NEQ = config.get<unsigned>("NEQ");
   const realtype T0 = config.get<realtype>("t0");
   const realtype TN = config.get<realtype>("tend");
   const realtype TS = config.get<realtype>("ts");
   realtype reltol = config.get<realtype>("rtol");
+
+  const size_t int_steps = size_t((TN - T0) / TS);  // FIXME sign etc.
+  y_series y_v;
+  y_v.reserve(int_steps);
+  t_series t_v;
+  t_v.reserve(int_steps);
 
   const int lmm = is_stiff ? CV_BDF : CV_ADAMS;
   const int iter = is_stiff ? CV_NEWTON : CV_FUNCTIONAL;
@@ -87,25 +93,19 @@ Solver<SolverCVode>::vectory_type SolverCVode::solve(const vectory_type& y0, Sol
   CVodeSetStopTime(cvode_mem_ptr, TN);
   CVodeSetMaxNumSteps(cvode_mem_ptr, -1);
 
-  auto obs = [&NEQ](N_Vector y, const realtype t) {
-    auto y_d = NV_DATA_S(y);
-    std::ostringstream out_ss;
-    out_ss << t << ": ";
-    std::for_each(y_d, &y_d[NEQ - 1], [&out_ss](realtype yi) { out_ss << yi << ", "; });
-    out_ss << y_d[NEQ - 1] << "\n";
-    std::cout << out_ss.str();
+  auto obs = [&y_v, &t_v](N_Vector y, const realtype t) {
+    y_v.push_back(nvector2container<vectory_type>(y));
+    t_v.push_back(t);
   };
   auto odes = [&cvode_mem_ptr](N_Vector y, const realtype, const realtype, realtype cur_t) {
     realtype t;
-    /*int cv_flag =*/
     CVode(cvode_mem_ptr, cur_t, y, &t, CV_NORMAL);
   };
   ode::step_times(odes, y, T0, TN, TS, obs);
 
-  auto y_N = nvector2container<vectory_type>(y);
   N_VDestroy_Serial(y);
 
-  return y_N;
+  return {y_v, t_v};
 }
 
 inline void SolverCVode::dlsmat2rowmat(DlsMat mat) {

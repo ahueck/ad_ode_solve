@@ -41,7 +41,7 @@ class SolverCVode : public Solver<SolverCVode> {
   void f(N_Vector y, N_Vector ydot);
   void J(N_Vector y, N_Vector fy, DlsMat J);
 
-  Solver<SolverCVode>::vectory_type solve(const vectory_type& y0, SolverConfig& config);
+  std::tuple<y_series, t_series> solve(const vectory_type& y0, const SolverConfig& config);
 
   virtual ~SolverCVode() = default;
 
