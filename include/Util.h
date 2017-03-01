@@ -35,7 +35,7 @@ inline void print(std::false_type, Container&& v, std::ostream& out) {
   const auto last = std::prev(std::end(v));
   const auto begin = std::begin(v);
   const auto dist = std::distance(begin, last);
-  if(dist >= 0) {
+  if (dist >= 0) {
     std::for_each(begin, last, [&out](const auto& yi) {
       detail::print(is_scalar_rem_ref_t<decltype(yi)>(), yi, out);
       out << ", ";

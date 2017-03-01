@@ -38,6 +38,7 @@ install:
   - cmake --version
 
 before_script:
+  - cd ${TRAVIS_BUILD_DIR}
   - |
     if [[ -n $GCC_VERSION ]] ; then 
       export CXX="g++-${GCC_VERSION}"
