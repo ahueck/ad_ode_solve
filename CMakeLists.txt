@@ -26,12 +26,14 @@ include_directories(${CVODE_INSTALL}/include)
 link_directories(${CVODE_INSTALL}/lib)
 include_directories(${CODIPACK_INSTALL}/include)
 include_directories(${MATPLOTLIB_INSTALL})
+include_directories(${CXXOPTS_INSTALL}/include)
 
 add_library(ad_ode src/SolverCVode.cpp)
-add_dependencies(ad_ode cvode codipack matplotlib-cpp)
+add_dependencies(ad_ode cvode codipack matplotlib-cpp cxxopts)
 
 target_link_libraries(ad_ode ${ODE_LIBS_CVODE})
 target_link_libraries(ad_ode ${PYTHON_LIBRARIES})
+
 
 add_subdirectory(examples)
 add_subdirectory(test)

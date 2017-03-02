@@ -53,3 +53,9 @@ make_subm(catch)
 set(MATPLOTLIB_INSTALL ${EXTERNALPACKAGES}/matplotlib-cpp PARENT_SCOPE)
 add_library(matplotlib-cpp INTERFACE)
 make_subm(matplotlib-cpp)
+
+#############
+# cxxopts (CLI Parser)
+set(CXXOPTS_INSTALL ${EXTERNALPACKAGES}/cxxopts PARENT_SCOPE)
+add_library(cxxopts INTERFACE)
+make_subm(cxxopts)

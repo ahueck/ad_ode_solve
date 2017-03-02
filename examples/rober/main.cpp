@@ -18,8 +18,7 @@ int main() {
   cf.put<realtype>("tend", 1e11);
   cf.put<realtype>("ts", 1e9);
   cf.put<realtype>("rtol", 1.1e-13);
-  std::vector<realtype> atol{1.1e-12, 1.1e-14, 1.1e-12};
-  cf.put("atolv", atol);
+  cf.put<std::vector<realtype>>("atolv", {1.1e-12, 1.1e-14, 1.1e-12});
 
   ode::cvode::SolverCVode cv(&f, &j);
   y_series y;
