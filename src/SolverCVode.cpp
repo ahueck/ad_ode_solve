@@ -12,20 +12,20 @@
 #include <Util.h>
 #include <UtilCVode.h>
 
-#include <nvector/nvector_serial.h>  /* serial N_Vector types, functions, and macros */
 #include <cvode/cvode_dense.h>       /* prototype for CVDense */
-#include <sundials/sundials_types.h> /* definition of type realtype */
+#include <nvector/nvector_serial.h>  /* serial N_Vector types, functions, and macros */
 #include <sundials/sundials_math.h>  /* definition of ABS */
+#include <sundials/sundials_types.h> /* definition of type realtype */
 
 #include <cassert>
-#include <iostream>
 #include <functional>
+#include <iostream>
 #include <sstream>
 
 namespace ode {
 namespace cvode {
 
-SolverCVode::SolverCVode() :  cvode_mem(nullptr), j_buffer(nullptr) {
+SolverCVode::SolverCVode() : cvode_mem(nullptr), j_buffer(nullptr) {
 }
 
 SolverCVode::SolverCVode(Eq* e, Jacobian* j) : Solver(e, j), cvode_mem(nullptr), j_buffer(nullptr) {

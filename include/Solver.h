@@ -64,7 +64,7 @@ class Solver {
   Jacobian* jac_f{nullptr};
 
  public:
-  Solver()  = default;
+  Solver() = default;
 
   explicit Solver(Eq* eq, Jacobian* jac_f = nullptr) : eq(eq), jac_f(jac_f) {
   }
@@ -94,4 +94,4 @@ class Solver {
 
 } /* namespace ode */
 
-#endif // SOLVER_H
+#endif  // SOLVER_H

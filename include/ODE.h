@@ -26,4 +26,4 @@ struct Jacobian {
 
 } /* namespace ode */
 
-#endif // ODE_H
+#endif  // ODE_H

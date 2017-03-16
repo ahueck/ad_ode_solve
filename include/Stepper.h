@@ -30,4 +30,4 @@ size_t step_times(ODESolver ode_s, State state, const Time T0, const Time TE, co
 
 } /* namespace ode */
 
-#endif // STEPPER_H
+#endif  // STEPPER_H

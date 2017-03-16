@@ -34,4 +34,4 @@ inline Container nvector2container(N_Vector c) {
 } /* namespace cvode */
 } /* namespace ode */
 
-#endif // UTILCVODE_H
+#endif  // UTILCVODE_H

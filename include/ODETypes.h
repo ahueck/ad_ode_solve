@@ -100,4 +100,4 @@ using t_series = vectory_type;
 
 } /* namespace ode */
 
-#endif // ODETYPES_H
+#endif  // ODETYPES_H

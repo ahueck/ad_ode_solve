@@ -70,4 +70,4 @@ inline int cv_jacobian_dense_cb(long int N, realtype t, N_Vector y, N_Vector fy,
 
 } /* extern "C" */
 
-#endif // SOLVERCVODE_H
+#endif  // SOLVERCVODE_H

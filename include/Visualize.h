@@ -53,4 +53,4 @@ inline void plot(const t_series& t, const y_series& y, const std::string& plot_f
 } /* namespace vis */
 } /* namespace ode */
 
-#endif // VISUALIZE_H
+#endif  // VISUALIZE_H

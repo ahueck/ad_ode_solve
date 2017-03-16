@@ -73,4 +73,4 @@ inline void print(T&& v, std::ostream& out = std::cout) {
 } /* namespace util */
 } /* namespace ode */
 
-#endif // UTIL_H
+#endif  // UTIL_H
