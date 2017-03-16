@@ -17,7 +17,7 @@
 #include <sundials/sundials_types.h> /* definition of type realtype */
 #include <sundials/sundials_math.h>  /* definition of ABS */
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <functional>
 #include <sstream>
@@ -25,7 +25,7 @@
 namespace ode {
 namespace cvode {
 
-SolverCVode::SolverCVode() : Solver(), cvode_mem(nullptr), j_buffer(nullptr) {
+SolverCVode::SolverCVode() :  cvode_mem(nullptr), j_buffer(nullptr) {
 }
 
 SolverCVode::SolverCVode(Eq* e, Jacobian* j) : Solver(e, j), cvode_mem(nullptr), j_buffer(nullptr) {
@@ -52,7 +52,7 @@ std::tuple<y_series, t_series> SolverCVode::solve(const vectory_type& y0, const 
   const realtype TS = config.get<realtype>("ts");
   realtype reltol = config.get<realtype>("rtol");
 
-  const size_t int_steps = size_t((TN - T0) / TS);  // FIXME sign etc.
+  const auto int_steps = size_t((TN - T0) / TS);  // FIXME sign etc.
   y_series y_v;
   y_v.reserve(int_steps);
   t_series t_v;

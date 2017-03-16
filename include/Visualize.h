@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_VISUALIZE_H_
-#define INCLUDE_VISUALIZE_H_
+#ifndef VISUALIZE_H
+#define VISUALIZE_H
 
 #include <ODETypes.h>
 #include <Util.h>
@@ -19,7 +19,7 @@
 namespace ode {
 namespace vis {
 
-inline void plot(const t_series& t, const y_series& y, std::string plot_file) {
+inline void plot(const t_series& t, const y_series& y, const std::string& plot_file) {
   namespace plt = matplotlibcpp;
 
   const auto num_y = (*std::begin(y)).size();
@@ -53,4 +53,4 @@ inline void plot(const t_series& t, const y_series& y, std::string plot_file) {
 } /* namespace vis */
 } /* namespace ode */
 
-#endif /* INCLUDE_VISUALIZE_H_ */
+#endif // VISUALIZE_H

@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_UTIL_H_
-#define INCLUDE_UTIL_H_
+#ifndef UTIL_H
+#define UTIL_H
 
 #include <iostream>
 #include <limits>
@@ -73,4 +73,4 @@ inline void print(T&& v, std::ostream& out = std::cout) {
 } /* namespace util */
 } /* namespace ode */
 
-#endif /* INCLUDE_UTIL_H_ */
+#endif // UTIL_H

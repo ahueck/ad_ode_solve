@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_SOLVER_H_
-#define INCLUDE_SOLVER_H_
+#ifndef SOLVER_H
+#define SOLVER_H
 
 #include "ODETypes.h"
 
@@ -60,12 +60,11 @@ template <typename Derived>
 class Solver {
  protected:
   SolverConfig config;
-  Eq* eq;
-  Jacobian* jac_f;
+  Eq* eq{nullptr};
+  Jacobian* jac_f{nullptr};
 
  public:
-  Solver() : eq(nullptr), jac_f(nullptr) {
-  }
+  Solver()  = default;
 
   explicit Solver(Eq* eq, Jacobian* jac_f = nullptr) : eq(eq), jac_f(jac_f) {
   }
@@ -90,10 +89,9 @@ class Solver {
     return cast().solve(y0, config);
   }
 
-  virtual ~Solver() {
-  }
+  virtual ~Solver() = default;
 };
 
 } /* namespace ode */
 
-#endif /* INCLUDE_SOLVER_H_ */
+#endif // SOLVER_H

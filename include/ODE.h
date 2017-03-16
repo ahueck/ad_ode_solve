@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_ODE_H_
-#define INCLUDE_ODE_H_
+#ifndef ODE_H
+#define ODE_H
 
 #include "ODETypes.h"
 
@@ -26,4 +26,4 @@ struct Jacobian {
 
 } /* namespace ode */
 
-#endif /* INCLUDE_ODE_H_ */
+#endif // ODE_H

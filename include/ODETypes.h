@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_ODETYPES_H_
-#define INCLUDE_ODETYPES_H_
+#ifndef ODETYPES_H
+#define ODETYPES_H
 
 #include <algorithm>
 #include <cstddef>
@@ -21,9 +21,9 @@ struct VectorView {
   using pointer_type = std::add_pointer_t<value_type>;
 
   pointer_type v;
-  const size_t n;
+  const size_t n{0};
 
-  VectorView() : v(nullptr), n(0) {
+  VectorView() : v(nullptr) {
   }
 
   VectorView(pointer_type vec, const size_t n) : v(vec), n(n) {
@@ -64,10 +64,10 @@ struct MatrixView {
   using pointer_type = std::add_pointer_t<value_type>;
 
   pointer_type mat;
-  size_t n;  // #columns
-  size_t m;  // #rows
+  size_t n{0};  // #columns
+  size_t m{0};  // #rows
 
-  MatrixView() : mat(nullptr), n(0), m(0) {
+  MatrixView() : mat(nullptr) {
   }
 
   MatrixView(pointer_type mat, const size_t n, const size_t m) : mat(mat), n(n), m(m) {
@@ -100,4 +100,4 @@ using t_series = vectory_type;
 
 } /* namespace ode */
 
-#endif /* INCLUDE_ODETYPES_H_ */
+#endif // ODETYPES_H
