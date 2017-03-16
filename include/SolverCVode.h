@@ -4,8 +4,8 @@
  *  Created on: Aug 3, 2016
  *      Author: ahueck
  */
-#ifndef INCLUDE_SOLVERCVODE_H_
-#define INCLUDE_SOLVERCVODE_H_
+#ifndef SOLVERCVODE_H
+#define SOLVERCVODE_H
 
 #include "Solver.h"
 #include "ODETypes.h"
@@ -43,7 +43,7 @@ class SolverCVode : public Solver<SolverCVode> {
 
   std::tuple<y_series, t_series> solve(const vectory_type& y0, const SolverConfig& config);
 
-  virtual ~SolverCVode() = default;
+  ~SolverCVode() override = default;
 
  private:
   void dlsmat2rowmat(DlsMat mat);
@@ -70,4 +70,4 @@ inline int cv_jacobian_dense_cb(long int N, realtype t, N_Vector y, N_Vector fy,
 
 } /* extern "C" */
 
-#endif /* INCLUDE_SOLVERCVODE_H_ */
+#endif  // SOLVERCVODE_H

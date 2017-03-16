@@ -12,14 +12,14 @@
 #include <Util.h>
 #include <UtilCVode.h>
 
-#include <nvector/nvector_serial.h>  /* serial N_Vector types, functions, and macros */
 #include <cvode/cvode_dense.h>       /* prototype for CVDense */
-#include <sundials/sundials_types.h> /* definition of type realtype */
+#include <nvector/nvector_serial.h>  /* serial N_Vector types, functions, and macros */
 #include <sundials/sundials_math.h>  /* definition of ABS */
+#include <sundials/sundials_types.h> /* definition of type realtype */
 
-#include <assert.h>
-#include <iostream>
+#include <cassert>
 #include <functional>
+#include <iostream>
 #include <sstream>
 
 namespace ode {
@@ -52,7 +52,7 @@ std::tuple<y_series, t_series> SolverCVode::solve(const vectory_type& y0, const 
   const realtype TS = config.get<realtype>("ts");
   realtype reltol = config.get<realtype>("rtol");
 
-  const size_t int_steps = size_t((TN - T0) / TS);  // FIXME sign etc.
+  const auto int_steps = size_t((TN - T0) / TS);  // FIXME sign etc.
   y_series y_v;
   y_v.reserve(int_steps);
   t_series t_v;

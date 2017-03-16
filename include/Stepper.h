@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_STEPPER_H_
-#define INCLUDE_STEPPER_H_
+#ifndef STEPPER_H
+#define STEPPER_H
 
 #include <Util.h>
 
@@ -30,4 +30,4 @@ size_t step_times(ODESolver ode_s, State state, const Time T0, const Time TE, co
 
 } /* namespace ode */
 
-#endif /* INCLUDE_STEPPER_H_ */
+#endif  // STEPPER_H

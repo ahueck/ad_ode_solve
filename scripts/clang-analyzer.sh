@@ -3,6 +3,7 @@
 
 folder=build_scan
 analyzer=scan-build-3.8
+viewer=scan-view-3.8
 
 if [[ ! $(type -p $analyzer) ]] ; then
   echo "Clang static analyzer (-3.8) not in path: " "$analyzer"
@@ -33,4 +34,3 @@ $analyzer -v -V -stats \
           -enable-checker llvm \
           -enable-checker security \
           make -j4
-

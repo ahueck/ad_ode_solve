@@ -5,8 +5,8 @@
  *      Author: ahueck
  */
 
-#ifndef INCLUDE_UTILCVODE_H_
-#define INCLUDE_UTILCVODE_H_
+#ifndef UTILCVODE_H
+#define UTILCVODE_H
 
 namespace ode {
 namespace cvode {
@@ -34,4 +34,4 @@ inline Container nvector2container(N_Vector c) {
 } /* namespace cvode */
 } /* namespace ode */
 
-#endif /* INCLUDE_UTILCVODE_H_ */
+#endif  // UTILCVODE_H
