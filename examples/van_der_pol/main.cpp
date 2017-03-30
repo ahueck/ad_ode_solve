@@ -24,7 +24,7 @@ int main() {
   cf.put<realtype>("tend", 3e3);
   cf.put<realtype>("ts", 1e1);
   cf.put<realtype>("rtol", 1.1e-13);
-  cf.put("atol", 1.0e-6);
+  cf.put<realtype>("atol", 1.0e-6);
 
   ode::cvode::SolverCVode cv(&f, &j);
   y_series y;

@@ -3,7 +3,8 @@ PROJECT(RoberODE)
 
 include(${PROJECT_SOURCE_DIR}/cmake/ToolchainOptions.cmake)
 
-set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(NOT BINARY_OUTPUT_DIRECTORY)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
@@ -27,14 +28,34 @@ link_directories(${CVODE_INSTALL}/lib)
 include_directories(${CODIPACK_INSTALL}/include)
 include_directories(${MATPLOTLIB_INSTALL})
 
-add_library(ad_ode src/SolverCVode.cpp)
+
+set(solver_src
+  src/SolverCVode.cpp)
+
+add_library(ad_ode ${solver_src})
 add_dependencies(ad_ode cvode codipack matplotlib-cpp)
 
-target_link_libraries(ad_ode ${ODE_LIBS_CVODE})
-target_link_libraries(ad_ode ${PYTHON_LIBRARIES})
+target_link_libraries(ad_ode ${ODE_LIBS_CVODE} ${PYTHON_LIBRARIES})
 
-add_subdirectory(examples)
-add_subdirectory(test)
+add_format_target(format-all
+  "Formats ad_ode_solve source files"
+)
+
+add_tidy_target(tidy-run
+  "Clang-tidy run on ad_ode_solve translation units"
+  SOURCES ${solver_src}
+  OTHER -header-filter='^${PROJECT_SOURCE_DIR}/include/.*h'
+)
+
+add_tidy_fix_target(tidy-core-fix
+  "Clang-tidy core run with fixes on ad_ode_solve translation units"
+  SOURCES ${solver_src}
+  OTHER -checks=-*,modernize-*,llvm-header-guard,llvm-namespace-comment,google-explicit-constructor
+        -header-filter='^${PROJECT_SOURCE_DIR}/include/.*h'
+)
 
 enable_testing()
 add_test(NAME RunTests COMMAND test_runner${EXE_SUFFIX})
+
+add_subdirectory(examples)
+add_subdirectory(test)

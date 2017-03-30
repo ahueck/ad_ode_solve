@@ -1,3 +1,6 @@
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(AddLLVM)
+
 if(NOT DEFINED LOG_LEVEL)
   set(LOG_LEVEL 1)
 endif()
